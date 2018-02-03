@@ -7,4 +7,14 @@ defmodule Webapi.StockView do
             _ -> stock
         end
     end
+
+    def render("stock.csv", %{stocks: stocks}) do
+        stocks
+        |> CSV.Encoding.Encoder.encode(headers: true)
+    end
+
+    def render("stock.csv", %{stock: stock}) do
+        [stock]
+        |> CSV.Encoding.Encoder.encode(headers: true)
+    end
 end

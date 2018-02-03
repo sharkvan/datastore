@@ -26,11 +26,47 @@ defmodule Webapi.StockCache.Cache do
         GenServer.call(__MODULE__, {:set, ticker, value})
     end
 
+    def delete(ticker) do
+        GenServer.call(__MODULE__, {:delete, ticker})
+    end
+
+    def stream() do
+        Stream.resource(
+            GenServer.call(__MODULE__, {:first}),
+            &fetch_record/1,
+            &close_stream/1)
+    end
+
+    defp fetch_record(:"$end_of_table") do
+        {:halt, nil}
+    end
+   
+    defp fetch_record(key) do
+        GenServer.call(__MODULE__, {:next, key})
+    end
+
+    defp close_stream(_key) do
+    end
+
     # GenServer callbacks
 
-    def handle_call({:get, ticker}, _from, state) do
+    def handle_call({:next, key}, _from, state) do
         %{ets_table_name: ets_table_name} = state
-        result = :ets.lookup(ets_table_name, ticker)
+        
+        value = :ets.lookup(ets_table_name, key)
+        |> Enum.map(&(elem(&1, 1)))
+        
+        next_key = :ets.next(ets_table_name, key)
+        
+        {:reply, {value, next_key}, state}
+    end
+
+    def handle_call({:first}, _from, state) do
+        %{ets_table_name: ets_table_name} = state
+
+        key = :ets.first(ets_table_name)
+        result = fn -> key end
+
         {:reply, result, state}
     end
 
@@ -38,6 +74,18 @@ defmodule Webapi.StockCache.Cache do
         %{ets_table_name: ets_table_name} = state
         true = :ets.insert(ets_table_name, {ticker, value})
         {:reply, value, state}
+    end
+
+    def handle_call({:get, ticker}, _from, state) do
+        %{ets_table_name: ets_table_name} = state
+        result = :ets.lookup(ets_table_name, ticker)
+        {:reply, result, state}
+    end
+
+    def handle_call({:delete, ticker}, _from, state) do
+        %{ets_table_name: ets_table_name} = state
+        result = :ets.delete(ets_table_name, ticker)
+        {:reply, result, state}
     end
 
     def init(args) do

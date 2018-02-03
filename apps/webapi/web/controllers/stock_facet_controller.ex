@@ -63,7 +63,7 @@ defmodule Webapi.StockFacetController do
     #stock_facet = Repo.get!(StockFacet, id)
 
     # Here we use delete! (with a bang) because we expect
-    # it to always work (and if it does not, it will raise).
+    # it to always work (and if it does not, it will raise an exception).
     #Repo.delete!(stock_facet)
 
     #send_resp(conn, :no_content, "")

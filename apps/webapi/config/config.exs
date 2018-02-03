@@ -7,6 +7,7 @@ use Mix.Config
 
 # Configures the endpoint
 config :webapi, Webapi.Endpoint,
+  http: [port: 80],
   url: [host: "localhost"],
   secret_key_base: "ULrNr2knsHZhY7q3ODJBLd3Hr6bbdBMk8sKA44gLK/2ge2QNbMnn9FXKkam64C7/",
   render_errors: [view: Webapi.ErrorView, accepts: ~w(json)],
