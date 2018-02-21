@@ -26,7 +26,7 @@ defmodule Webapi.StockFacetController do
                 {:found, value} -> value
                 {:not_found, _} -> %{}
             end
-            |> Map.merge(facet)
+            |> MapUtils.deep_merge(facet)
 
     Cache.set(symbol, stock)
 
