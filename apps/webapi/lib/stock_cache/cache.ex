@@ -72,12 +72,14 @@ defmodule Webapi.StockCache.Cache do
 
     def handle_call({:set, ticker, value}, _from, state) do
         %{ets_table_name: ets_table_name} = state
+
         true = :ets.insert(ets_table_name, {ticker, value})
         {:reply, value, state}
     end
 
     def handle_call({:get, ticker}, _from, state) do
         %{ets_table_name: ets_table_name} = state
+
         result = :ets.lookup(ets_table_name, ticker)
         {:reply, result, state}
     end
