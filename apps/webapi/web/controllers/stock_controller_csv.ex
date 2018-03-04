@@ -2,15 +2,19 @@ defmodule Webapi.StockControllerCSV do
     use Webapi.Web, :controller
 
     def csv(conn, %{}) do
-        default = Webapi.StockCache.Cache.stream()
-        |> Stream.take(1)
-        |> Enum.at(0)
-        |> Map.keys()
-        |> List.foldl([], fn
-            key, acc when key == "dividends" -> acc
-            key, acc -> [{key, nil}] ++ acc 
-           end)
-        |> Map.new()
+        default = %{ "change" => nil,
+                     "price" => nil,
+                     "eps" => nil,
+                     "industry" => nil,
+                     "sector" => nil,
+                     "symbol" => nil,
+                     "symbolName" => nil,
+                     "yearHigh" => nil,
+                     "yearLow" => nil,
+                     "amount" => nil,
+                     "exDate" => nil,
+                     "payDate" => nil 
+                     }
 
         conn 
         |> put_resp_content_type("text/plain")
@@ -18,7 +22,12 @@ defmodule Webapi.StockControllerCSV do
                                 |> Stream.map(fn(m) -> 
                                     div = latest_div(Map.get(m, "dividends", {}))
                                     m = Map.drop(m, ["dividends"])
-                                    Map.merge(m, div)
+                                    m = div
+                                    |> is_map()
+                                    |> case do
+                                        true -> Map.merge(m, div)
+                                        false -> m
+                                        end
                                     end)
                                 |> Stream.map(fn(m) -> Map.merge(default, m) end)
                                 |> CSV.Encoding.Encoder.encode(headers: true)
@@ -26,8 +35,9 @@ defmodule Webapi.StockControllerCSV do
     end
 
     defp latest_div(map) when map_size(map) == 0, do: map
+    defp latest_div(map) when is_map(map) != true, do: map
 
-    defp latest_div(map) do
+    defp latest_div(map) when is_map(map) do
         map
         |> Map.to_list()
         |> List.foldl({}, &max_paydate/2)
@@ -39,8 +49,6 @@ defmodule Webapi.StockControllerCSV do
     defp max_paydate(left, right) when tuple_size(right) == 0, do: left
 
     defp max_paydate(left, right) do
-        IO.inspect left
-        IO.inspect right
         {_, %{"payDate" => left_date}} = left
         {_, %{"payDate" => right_date}} = right
 

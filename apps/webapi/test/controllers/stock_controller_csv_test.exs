@@ -1,6 +1,14 @@
 defmodule Webapi.StockControllerCsvTest do
     use Webapi.ConnCase
 
+    test "return csv without dividends", %{conn: conn} do
+        post conn, "/", [stock: Map.drop(stock(), ["dividends"])]
+
+        conn = get build_conn(), stock_controller_csv_path(conn, :csv)
+        
+        assert response(conn, 200) == "amount,change,eps,exDate,industry,payDate,price,sector,symbol,symbolName,yearHigh,yearLow\r\n,0.09,1.17,,Finance - Investment Funds,,5.79,\"SIC-6726 Unit Investment Trusts, Face-Amount\",TICC,TICC Capital Corp.,8.19,5.15\r\n" 
+    end
+    
     test "return csv", %{conn: conn} do
         post conn, "/", [stock: stock()]
 
