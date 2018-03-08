@@ -13,25 +13,28 @@ defmodule Webapi.StockControllerCSV do
                      "yearLow" => nil,
                      "amount" => nil,
                      "exDate" => nil,
-                     "payDate" => nil 
+                     "payDate" => nil,
+                     "trailing_yield" => nil
                      }
 
         conn 
         |> put_resp_content_type("text/plain")
         |> send_resp(200, Webapi.StockCache.Cache.stream()
                                 |> Stream.map(fn(m) -> 
-                                    trailing_yield = Webapi.Dividend.trailing_yield(m)
 
-                                    div_list = Map.get(m, "dividends", {})
-                                    div = latest_div(div_list)
-                                    m = Map.drop(m, ["dividends"])
-                                    m = div
-                                    |> is_map()
+                                    m
+                                    |> Map.get("dividends", {})
+                                    |> latest_div()
                                     |> case do
-                                        true -> Map.merge(m, div)
-                                        false -> m
+                                        div when is_map(div) -> 
+                                                trailing_yield = Webapi.Dividend.trailing_yield(m)
+                                                
+                                                m
+                                                |> Map.drop(["dividends"])
+                                                |> Map.merge(div)
+                                                |> Map.put("trailing_yield", trailing_yield)
+                                        _ -> m
                                         end
-                                    |> Map.put("trailing_yield", trailing_yield)
                                     end)
                                 |> Stream.map(fn(m) -> Map.merge(default, m) end)
                                 |> CSV.Encoding.Encoder.encode(headers: true)
