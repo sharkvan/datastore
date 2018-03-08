@@ -20,7 +20,10 @@ defmodule Webapi.StockControllerCSV do
         |> put_resp_content_type("text/plain")
         |> send_resp(200, Webapi.StockCache.Cache.stream()
                                 |> Stream.map(fn(m) -> 
-                                    div = latest_div(Map.get(m, "dividends", {}))
+                                    trailing_yield = Webapi.Dividend.trailing_yield(m)
+
+                                    div_list = Map.get(m, "dividends", {})
+                                    div = latest_div(div_list)
                                     m = Map.drop(m, ["dividends"])
                                     m = div
                                     |> is_map()
@@ -28,6 +31,7 @@ defmodule Webapi.StockControllerCSV do
                                         true -> Map.merge(m, div)
                                         false -> m
                                         end
+                                    |> Map.put("trailing_yield", trailing_yield)
                                     end)
                                 |> Stream.map(fn(m) -> Map.merge(default, m) end)
                                 |> CSV.Encoding.Encoder.encode(headers: true)
