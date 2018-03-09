@@ -25,6 +25,10 @@ defmodule Webapi.Dividend do
         IO.inspect {:price, price}
         IO.inspect {:amount, amount}
 
-        amount / String.to_float(price) 
+        Float.parse(price)
+        |> case do
+            {^price, _} -> amount / ^price
+            :error -> 0
+        end
     end
 end
