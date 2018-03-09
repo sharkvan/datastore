@@ -3,7 +3,6 @@ defmodule Webapi.Dividend do
     def trailing_yield(%{"price" => price, "dividends" => payments}) do
         today = Date.utc_today()
         gte = &>=/2
-        yield = fn(x) -> x / String.to_float(price) end
 
         payments
         |> Stream.filter(fn(x) ->
@@ -18,8 +17,14 @@ defmodule Webapi.Dividend do
                 
                 acc + String.to_float(amount)
             end)
-        |> yield.()
+        |> yield(price)
         |> IO.inspect
     end
 
+    defp yield(amount, price) do
+        IO.inspect {:price, price}
+        IO.inspect {:amount, amount}
+
+        amount / String.to_float(price) 
+    end
 end
