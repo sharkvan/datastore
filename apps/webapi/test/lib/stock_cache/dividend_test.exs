@@ -7,6 +7,15 @@ defmodule Webapi.DividendTest do
 
     end
 
+    test "Division by zero" do
+
+        data = quarterly()
+        data = %{data | "price" => "0"}
+
+        assert Webapi.Dividend.trailing_yield(data) == 0
+
+    end
+
     def quarterly() do
         %{ "price" => "5.00",
             "dividends" => %{

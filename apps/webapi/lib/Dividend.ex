@@ -27,7 +27,7 @@ defmodule Webapi.Dividend do
 
         Float.parse(price)
         |> case do
-            {0, _} -> 0
+            {0.0, _} -> 0
             {price, _} -> amount / price
             :error -> 0
         end
