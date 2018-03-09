@@ -23,13 +23,20 @@ defmodule Webapi.Dividend do
         |> IO.inspect
         |> List.first()
         |> IO.inspect
-        |> elem(1)
+        |> getDiv()
         |> IO.inspect
         |> Map.get("amount", 0)
         |> IO.inspect
         |> payout_guess.(frequency)
         |> IO.inspect
         |> yield(price)
+    end
+
+    defp getDiv(record) do
+        case record do
+            nil -> %{}
+            _ -> elem(record, 1)
+        end
     end
 
     def forward_yield(%{"price" => price, "dividends" => payments}) do
