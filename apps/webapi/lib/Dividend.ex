@@ -25,7 +25,7 @@ defmodule Webapi.Dividend do
         |> IO.inspect
         |> getDiv()
         |> IO.inspect
-        |> Map.get("amount", 0)
+        |> Map.get("amount", "0")
         |> IO.inspect
         |> payout_guess.(frequency)
         |> IO.inspect
