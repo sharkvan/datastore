@@ -14,7 +14,8 @@ defmodule Webapi.StockControllerCSV do
                      "amount" => nil,
                      "exDate" => nil,
                      "payDate" => nil,
-                     "trailing_yield" => nil
+                     "trailing_yield" => nil,
+                     "forward_yield" => nil
                      }
 
         conn 
@@ -28,11 +29,13 @@ defmodule Webapi.StockControllerCSV do
                                     |> case do
                                         div when is_map(div) -> 
                                                 trailing_yield = Webapi.Dividend.trailing_yield(m)
-                                                
+                                                forward_yield = Webapi.Dividend.forward_yield(m)
+
                                                 m
                                                 |> Map.drop(["dividends"])
                                                 |> Map.merge(div)
                                                 |> Map.put("trailing_yield", trailing_yield)
+                                                |> Map.put("forward_yield", forward_yield)
                                         _ -> m
                                         end
                                     end)
