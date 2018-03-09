@@ -16,8 +16,21 @@ defmodule Webapi.DividendTest do
 
     end
 
+    test "Forward yield" do
+
+        assert Webapi.Dividend.forward_yield(quarterly()) == 0.16
+    
+    end
+
+    test "Forward yield with no Frequency" do
+
+        assert Webapi.Dividend.forward_yield(Map.drop(quarterly(),["frequency"])) == 0.16
+    
+    end
+
     def quarterly() do
         %{ "price" => "5.00",
+            "frequency" => "QTR",
             "dividends" => %{
             "2016-03-31" => %{"payDate" => "2016-03-31","exDate" => "2016-03-15","amount" => "0.29"},
             "2007-06-29" => %{"payDate" => "2007-06-29","exDate" => "2007-06-06","amount" => "0.36"},
