@@ -75,7 +75,7 @@ defmodule Webapi.Dividend do
             <<year::binary-size(4), "-", month::binary-size(2), "-", day::binary>> -> month
             _ -> "00"
         end
-        |> case month do
+        |> case do
             "00" -> 0
             m when m in ["01", "04", "07", "10"] -> 1
             m when m in ["02", "05", "08", "11"] -> 2
