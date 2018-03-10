@@ -2,10 +2,14 @@ defmodule Webapi.StockControllerCSV do
     use Webapi.Web, :controller
 
     def csv(conn, %{}) do
-        default = %{ "change" => nil,
-                     "price" => nil,
+        default = %{ "amount" => nil,
+                     "change" => nil,
                      "eps" => nil,
+                     "exDate" => nil,
+                     "payDate" => nil,
+                     "qtrMonth" => nil,
                      "industry" => nil,
+                     "price" => nil,
                      "sector" => nil,
                      "symbol" => nil,
                      "symbolName" => nil,
