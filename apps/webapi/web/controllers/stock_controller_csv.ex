@@ -35,6 +35,7 @@ defmodule Webapi.StockControllerCSV do
                                                 m
                                                 |> Map.drop(["dividends"])
                                                 |> Map.merge(div)
+                                                |> Map.merge(Webapi.Dividend.payQtrMonth(div))
                                                 |> Map.put("trailing_yield", trailing_yield)
                                                 |> Map.put("forward_yield", forward_yield)
                                         _ -> m

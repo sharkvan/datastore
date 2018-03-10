@@ -20,15 +20,10 @@ defmodule Webapi.Dividend do
             end)
         |> Enum.to_list()
         |> Enum.sort_by(fn(x) -> elem(x, 0) end, &>=/2)
-        |> IO.inspect
         |> List.first()
-        |> IO.inspect
         |> getDiv()
-        |> IO.inspect
         |> Map.get("amount", "0")
-        |> IO.inspect
         |> payout_guess.(frequency)
-        |> IO.inspect
         |> yield(price)
     end
 
@@ -73,6 +68,21 @@ defmodule Webapi.Dividend do
             "STP" -> 0
             _ -> 4
         end
+    end
+
+    def payQtrMonth(%{"payDate" => payDate}) do
+        qtrMonth = case payDate do
+            <<year::binary-saize(4), "-", month::binary-size(2), "-", day::binary>> -> month
+            _ -> "00"
+        end
+        |> case month do
+            "00" -> 0
+            m when m in ["01", "04", "07", "10"] -> 1
+            m when m in ["02", "05", "08", "11"] -> 2
+            m when m in ["03", "06", "09", "12"] -> 3
+        end
+
+        %{"qtrMonth" => qtrMonth}
     end
 
     defp yield(amount, price) do
