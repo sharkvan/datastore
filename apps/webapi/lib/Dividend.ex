@@ -72,7 +72,7 @@ defmodule Webapi.Dividend do
 
     def payQtrMonth(%{"payDate" => payDate}) do
         qtrMonth = case payDate do
-            <<year::binary-saize(4), "-", month::binary-size(2), "-", day::binary>> -> month
+            <<year::binary-size(4), "-", month::binary-size(2), "-", day::binary>> -> month
             _ -> "00"
         end
         |> case month do
