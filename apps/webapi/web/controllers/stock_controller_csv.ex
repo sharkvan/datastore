@@ -15,7 +15,8 @@ defmodule Webapi.StockControllerCSV do
                      "exDate" => nil,
                      "payDate" => nil,
                      "trailing_yield" => nil,
-                     "forward_yield" => nil
+                     "forward_yield" => nil,
+                     "frequency" => "QTR"
                      }
 
         conn 
