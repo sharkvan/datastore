@@ -13,6 +13,12 @@ config :webapi, Webapi.Endpoint,
   check_origin: false,
   watchers: []
 
+config :webapi, Webapi.Repo,
+  adapter: Ecto.Adapters.Postgres,
+  database: "stockcraz",
+  username: "postgres",
+  password: "Postgres",
+  hostname: "localhost"
 
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"
