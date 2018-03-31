@@ -6,7 +6,7 @@ defmodule Webapi.StockControllerCsvTest do
 
         conn = get build_conn(), stock_controller_csv_path(conn, :csv)
         
-        assert response(conn, 200) == "amount,change,eps,exDate,industry,payDate,price,sector,symbol,symbolName,yearHigh,yearLow\r\n,0.09,1.17,,Finance - Investment Funds,,5.79,\"SIC-6726 Unit Investment Trusts, Face-Amount\",TICC,TICC Capital Corp.,8.19,5.15\r\n" 
+        assert response(conn, 200) == "amount,change,eps,exDate,forward_yield,frequency,industry,payDate,price,qtrMonth,sector,symbol,symbolName,trailing_yield,yearHigh,yearLow\r\n0.0,0.09,1.17, ,2017-12-14,0.1381692573402418,QTR,Finance - Investment Funds,2017-12-29,5.79,3,\"SIC-6726 Unit Investment Trusts, Face-Amount\",TICC,TICC Capital Corp.,0.1381692573402418,8.19,5.15\r\n" 
     end
     
     test "return csv", %{conn: conn} do
@@ -14,7 +14,7 @@ defmodule Webapi.StockControllerCsvTest do
 
         conn = get build_conn(), stock_controller_csv_path(conn, :csv)
         
-        assert response(conn, 200) == "amount,change,eps,exDate,industry,payDate,price,sector,symbol,symbolName,yearHigh,yearLow\r\n0.2,0.09,1.17,2017-12-14,Finance - Investment Funds,2017-12-29,5.79,\"SIC-6726 Unit Investment Trusts, Face-Amount\",TICC,TICC Capital Corp.,8.19,5.15\r\n" 
+        assert response(conn, 200) == "amount,change,eps,exDate,forward_yield,frequency,industry,payDate,price,qtrMonth,sector,symbol,symbolName,trailing_yield,yearHigh,yearLow\r\n0.2,0.09,1.17,2017-12-14,0.1381692573402418,QTR,Finance - Investment Funds, ,5.79,0,\"SIC-6726 Unit Investment Trusts, Face-Amount\",TICC,TICC Capital Corp.,0.1381692573402418,8.19,5.15\r\n" 
     end
 
     def stock() do

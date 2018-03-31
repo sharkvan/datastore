@@ -38,6 +38,8 @@ defmodule Webapi.Web do
       # Import convenience functions from controllers
       import Phoenix.Controller, only: [get_csrf_token: 0, get_flash: 2, view_module: 1]
 
+      use Phoenix.HTML
+
       import Webapi.Router.Helpers
       import Webapi.ErrorHelpers
       import Webapi.Gettext

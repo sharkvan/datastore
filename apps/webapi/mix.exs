@@ -17,7 +17,7 @@ defmodule Webapi.Mixfile do
   # Type `mix help compile.app` for more information.
   def application do
     [mod: {Webapi, []},
-     applications: [:phoenix, :phoenix_pubsub, :cowboy, :logger, :gettext]]
+     applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext]]
   end
 
   # Specifies which paths to compile per environment.
@@ -30,6 +30,7 @@ defmodule Webapi.Mixfile do
   defp deps do
     [{:phoenix, "~> 1.2.5"},
      {:phoenix_pubsub, "~> 1.0"},
+     {:phoenix_html, "~> 2.10"},
      {:gettext, "~> 0.11"},
      {:cowboy, "~> 1.0"},
      {:poison, "~> 2.0"},
