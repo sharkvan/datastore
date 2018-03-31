@@ -1,4 +1,0 @@
-# Stockdata
-
-**TODO: Add description**
-
