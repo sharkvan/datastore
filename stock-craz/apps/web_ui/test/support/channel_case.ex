@@ -27,10 +27,12 @@ defmodule WebUi.ChannelCase do
 
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(WebUi.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(StockCraz.Repo)
+
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(WebUi.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(StockCraz.Repo, {:shared, self()})
     end
+
     :ok
   end
 

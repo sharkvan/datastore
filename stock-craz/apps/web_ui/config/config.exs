@@ -8,7 +8,7 @@ use Mix.Config
 # General application configuration
 config :web_ui,
   namespace: WebUi,
-  ecto_repos: [WebUi.Repo]
+  ecto_repos: [StockCraz.Repo]
 
 # Configures the endpoint
 config :web_ui, WebUi.Endpoint,
@@ -24,7 +24,7 @@ config :logger, :console,
   metadata: [:request_id]
 
 config :web_ui, :generators,
-  context_app: :user
+  context_app: :stockcraz
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

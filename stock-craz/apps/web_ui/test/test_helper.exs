@@ -1,4 +1,4 @@
 ExUnit.start()
 
-Ecto.Adapters.SQL.Sandbox.mode(WebUi.Repo, :manual)
+Ecto.Adapters.SQL.Sandbox.mode(StockCraz.Repo, :manual)
 

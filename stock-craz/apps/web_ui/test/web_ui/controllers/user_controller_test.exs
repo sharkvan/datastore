@@ -1,11 +1,12 @@
 defmodule WebUi.UserControllerTest do
   use WebUi.ConnCase
 
-  alias Stockcraz.Accounts
+  alias StockCraz.Accounts
 
-  @create_attrs %{email: "some email"}
-  @update_attrs %{email: "some updated email"}
-  @invalid_attrs %{email: nil}
+  @create_attrs %{email: "some@email"}
+  @update_attrs %{email: "some.updated@email"}
+  @invalid_attrs %{email: "some email"}
+  @missing_attrs %{email: nil}
 
   def fixture(:user) do
     {:ok, user} = Accounts.create_user(@create_attrs)
@@ -41,6 +42,11 @@ defmodule WebUi.UserControllerTest do
       conn = post conn, user_path(conn, :create), user: @invalid_attrs
       assert html_response(conn, 200) =~ "New User"
     end
+
+    test "renders errors when data is missing", %{conn: conn} do
+      conn = post conn, user_path(conn, :create), user: @missing_attrs
+      assert html_response(conn, 200) =~ "New User"
+    end
   end
 
   describe "edit user" do
@@ -60,7 +66,7 @@ defmodule WebUi.UserControllerTest do
       assert redirected_to(conn) == user_path(conn, :show, user)
 
       conn = get conn, user_path(conn, :show, user)
-      assert html_response(conn, 200) =~ "some updated email"
+      assert html_response(conn, 200) =~ "some.updated@email"
     end
 
     test "renders errors when data is invalid", %{conn: conn, user: user} do
