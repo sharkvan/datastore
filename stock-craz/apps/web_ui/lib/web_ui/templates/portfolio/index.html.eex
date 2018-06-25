@@ -1,0 +1,26 @@
+<h2>Listing Portfolios</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for portfolio <- @portfolios do %>
+    <tr>
+      <td><%= portfolio.name %></td>
+
+      <td class="text-right">
+        <span><%= link "Show", to: portfolio_path(@conn, :show, portfolio), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: portfolio_path(@conn, :edit, portfolio), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: portfolio_path(@conn, :delete, portfolio), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Portfolio", to: portfolio_path(@conn, :new) %></span>

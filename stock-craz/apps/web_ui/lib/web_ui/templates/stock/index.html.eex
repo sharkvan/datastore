@@ -1,0 +1,36 @@
+<h2>Listing Stocks</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Symbol</th>
+      <th>Name</th>
+      <th>Price</th>
+      <th>Eps</th>
+      <th>Price high year</th>
+      <th>Price low year</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for stock <- @stocks do %>
+    <tr>
+      <td><%= stock.symbol %></td>
+      <td><%= stock.name %></td>
+      <td><%= stock.price %></td>
+      <td><%= stock.eps %></td>
+      <td><%= stock.price_high_year %></td>
+      <td><%= stock.price_low_year %></td>
+
+      <td class="text-right">
+        <span><%= link "Show", to: stock_path(@conn, :show, stock), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: stock_path(@conn, :edit, stock), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: stock_path(@conn, :delete, stock), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Stock", to: stock_path(@conn, :new) %></span>

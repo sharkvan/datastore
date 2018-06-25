@@ -1,0 +1,5 @@
+<h2>Edit Portfolio</h2>
+
+<%= render "form.html", Map.put(assigns, :action, portfolio_path(@conn, :update, @portfolio)) %>
+
+<span><%= link "Back", to: portfolio_path(@conn, :index) %></span>

@@ -1,0 +1,47 @@
+<%= form_for @changeset, @action, fn f -> %>
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= label f, :stock_id, class: "control-label" %>
+    <%= number_input f, :stock_id, class: "form-control" %>
+    <%= error_tag f, :stock_id %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :cost_basis, class: "control-label" %>
+    <%= number_input f, :cost_basis, step: "any", class: "form-control" %>
+    <%= error_tag f, :cost_basis %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :investment_date, class: "control-label" %>
+    <%= datetime_select f, :investment_date, class: "form-control" %>
+    <%= error_tag f, :investment_date %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :starting_shares, class: "control-label" %>
+    <%= number_input f, :starting_shares, class: "form-control" %>
+    <%= error_tag f, :starting_shares %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :shares, class: "control-label" %>
+    <%= number_input f, :shares, step: "any", class: "form-control" %>
+    <%= error_tag f, :shares %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :target_roi, class: "control-label" %>
+    <%= number_input f, :target_roi, step: "any", class: "form-control" %>
+    <%= error_tag f, :target_roi %>
+  </div>
+
+  <div class="form-group">
+    <%= submit "Submit", class: "btn btn-primary" %>
+  </div>
+<% end %>

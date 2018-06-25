@@ -1,0 +1,38 @@
+<h2>Show Stock</h2>
+
+<ul>
+
+  <li>
+    <strong>Symbol:</strong>
+    <%= @stock.symbol %>
+  </li>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @stock.name %>
+  </li>
+
+  <li>
+    <strong>Price:</strong>
+    <%= @stock.price %>
+  </li>
+
+  <li>
+    <strong>Eps:</strong>
+    <%= @stock.eps %>
+  </li>
+
+  <li>
+    <strong>Price high year:</strong>
+    <%= @stock.price_high_year %>
+  </li>
+
+  <li>
+    <strong>Price low year:</strong>
+    <%= @stock.price_low_year %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: stock_path(@conn, :edit, @stock) %></span>
+<span><%= link "Back", to: stock_path(@conn, :index) %></span>

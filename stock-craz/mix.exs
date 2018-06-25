@@ -1,4 +1,4 @@
-defmodule Stockcraz.MixProject do
+defmodule StockCraz.MixProject do
   use Mix.Project
 
   def project do

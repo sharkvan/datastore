@@ -13,11 +13,18 @@ defmodule WebUi.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :authenticated do
+
+  end
+
   scope "/", WebUi do
     pipe_through :browser # Use the default browser stack
 
     get "/", PageController, :index
     resources "/users", UserController
+    resources "/stocks", StockController, param: "symbol"
+    resources "/portfolios", PortfolioController
+    resources "/investments", InvestmentController
   end
 
   # Other scopes may use custom stacks.

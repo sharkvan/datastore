@@ -1,0 +1,38 @@
+<h2>Show Investment</h2>
+
+<ul>
+
+  <li>
+    <strong>Stock:</strong>
+    <%= @investment.stock_id %>
+  </li>
+
+  <li>
+    <strong>Cost basis:</strong>
+    <%= @investment.cost_basis %>
+  </li>
+
+  <li>
+    <strong>Investment date:</strong>
+    <%= @investment.investment_date %>
+  </li>
+
+  <li>
+    <strong>Starting shares:</strong>
+    <%= @investment.starting_shares %>
+  </li>
+
+  <li>
+    <strong>Shares:</strong>
+    <%= @investment.shares %>
+  </li>
+
+  <li>
+    <strong>Target roi:</strong>
+    <%= @investment.target_roi %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: investment_path(@conn, :edit, @investment) %></span>
+<span><%= link "Back", to: investment_path(@conn, :index) %></span>

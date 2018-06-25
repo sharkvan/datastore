@@ -1,0 +1,13 @@
+<h2>Show Portfolio</h2>
+
+<ul>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @portfolio.name %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: portfolio_path(@conn, :edit, @portfolio) %></span>
+<span><%= link "Back", to: portfolio_path(@conn, :index) %></span>
