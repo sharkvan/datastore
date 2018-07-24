@@ -4,6 +4,8 @@ defmodule StockCraz.Portfolios.Investment do
 
 
   schema "investments" do
+    field :symbol, :string, virtual: true
+
     field :portfolio_id, :integer
     field :stock_id, :integer
     field :cost_basis, :decimal
@@ -13,6 +15,7 @@ defmodule StockCraz.Portfolios.Investment do
     field :target_roi, :decimal
 
     timestamps()
+
   end
 
   @doc false

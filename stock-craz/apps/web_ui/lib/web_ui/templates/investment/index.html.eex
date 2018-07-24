@@ -1,4 +1,4 @@
-<h2>Listing Investments</h2>
+<h2>Investments</h2>
 
 <table class="table">
   <thead>
@@ -16,7 +16,7 @@
   <tbody>
 <%= for investment <- @investments do %>
     <tr>
-      <td><%= investment.stock_id %></td>
+      <td><%= investment.symbol %></td>
       <td><%= investment.cost_basis %></td>
       <td><%= investment.investment_date %></td>
       <td><%= investment.starting_shares %></td>
@@ -24,13 +24,13 @@
       <td><%= investment.target_roi %></td>
 
       <td class="text-right">
-        <span><%= link "Show", to: investment_path(@conn, :show, investment), class: "btn btn-default btn-xs" %></span>
-        <span><%= link "Edit", to: investment_path(@conn, :edit, investment), class: "btn btn-default btn-xs" %></span>
-        <span><%= link "Delete", to: investment_path(@conn, :delete, investment), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+        <span><%= link "Show", to: portfolio_investment_path(@conn, :show, investment.portfolio_id, investment), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: portfolio_investment_path(@conn, :edit, investment.portfolio_id, investment), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: portfolio_investment_path(@conn, :delete, investment.portfolio_id, investment), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
       </td>
     </tr>
 <% end %>
   </tbody>
 </table>
 
-<span><%= link "New Investment", to: investment_path(@conn, :new) %></span>
+<span><%= link "New Investment", to: portfolio_investment_path(@conn, :new, @portfolio_id) %></span>

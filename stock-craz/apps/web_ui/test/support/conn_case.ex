@@ -23,9 +23,16 @@ defmodule WebUi.ConnCase do
 
       # The default endpoint for testing
       @endpoint WebUi.Endpoint
+
+      def fixture(conn, :sign_in) do
+        conn
+        |> recycle()
+        |> Plug.Test.init_test_session(%{})
+        |> WebUi.Plugs.Session.sign_in(%{id: 1, email: "test@test.com"})
+      end
+
     end
   end
-
 
   setup tags do
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(StockCraz.Repo)
@@ -34,7 +41,7 @@ defmodule WebUi.ConnCase do
       Ecto.Adapters.SQL.Sandbox.mode(StockCraz.Repo, {:shared, self()})
     end
 
-    {:ok, conn: Phoenix.ConnTest.build_conn()}
+    {:ok, conn: Phoenix.ConnTest.build_conn() }
   end
 
 end

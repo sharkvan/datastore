@@ -1,5 +1,5 @@
 <h2>Edit Investment</h2>
 
-<%= render "form.html", Map.put(assigns, :action, investment_path(@conn, :update, @investment)) %>
+<%= render "form.html", Map.put(assigns, :action, portfolio_investment_path(@conn, :update, @portfolio_id, @investment.id)) %>
 
-<span><%= link "Back", to: investment_path(@conn, :index) %></span>
+<span><%= link "Back", to: portfolio_investment_path(@conn, :index, @portfolio_id) %></span>

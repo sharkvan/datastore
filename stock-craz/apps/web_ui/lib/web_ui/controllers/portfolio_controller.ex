@@ -4,6 +4,19 @@ defmodule WebUi.PortfolioController do
   alias StockCraz.Portfolios
   alias StockCraz.Portfolios.Portfolio
 
+  plug :authenticate_user
+
+  defp authenticate_user(conn, _params) do
+    case WebUi.Plugs.Session.signed_in(conn) do
+      {:ok, _} -> conn
+      {:error, _} ->
+        conn
+        |> put_flash(:error, "Please sign in, or sign up")
+        |> redirect(to: session_path(conn, :new))
+        |> halt()
+    end
+  end
+
   def index(conn, _params) do
     portfolios = Portfolios.list_portfolios()
     render(conn, "index.html", portfolios: portfolios)
@@ -15,6 +28,7 @@ defmodule WebUi.PortfolioController do
   end
 
   def create(conn, %{"portfolio" => portfolio_params}) do
+    portfolio_params = Map.put(portfolio_params, "user_id", conn.assigns.current_user.id)
     case Portfolios.create_portfolio(portfolio_params) do
       {:ok, portfolio} ->
         conn

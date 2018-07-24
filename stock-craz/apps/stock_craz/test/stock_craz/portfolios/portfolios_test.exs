@@ -83,7 +83,7 @@ defmodule StockCraz.PortfoliosTest do
 
     test "list_investments/0 returns all investments" do
       investment = investment_fixture()
-      assert Portfolios.list_investments() == [investment]
+      assert Portfolios.list_investments(42) == [investment]
     end
 
     test "get_investment!/1 returns the investment with given id" do

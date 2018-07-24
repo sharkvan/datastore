@@ -5,8 +5,9 @@ defmodule StockCraz.Portfolios do
 
   import Ecto.Query, warn: false
   alias StockCraz.Repo
-
   alias StockCraz.Portfolios.Portfolio
+  alias StockCraz.Portfolios.Investment
+  alias StockCraz.Securities
 
   @doc """
   Returns the list of portfolios.
@@ -102,19 +103,20 @@ defmodule StockCraz.Portfolios do
     Portfolio.changeset(portfolio, %{})
   end
 
-  alias StockCraz.Portfolios.Investment
 
   @doc """
-  Returns the list of investments.
+  Returns the list of investments for a portfolio.
 
   ## Examples
 
-      iex> list_investments()
+      iex> list_investments(1)
       [%Investment{}, ...]
 
   """
-  def list_investments do
-    Repo.all(Investment)
+  def list_investments(portfolio_id) do
+    query = from i in Investment, where: i.portfolio_id == ^portfolio_id
+    Repo.all(query)
+    |> Enum.map(&set_symbol/1)
   end
 
   @doc """
@@ -131,7 +133,25 @@ defmodule StockCraz.Portfolios do
       ** (Ecto.NoResultsError)
 
   """
-  def get_investment!(id), do: Repo.get!(Investment, id)
+  # Update the investment retrieval to have the stock symbol.
+  # This may mean that we look up the symbol. We might even rethink
+  # this current solution to use CQRS like commands and events.
+  def get_investment!(id) do
+    Repo.get!(Investment, id)
+    |> set_symbol()
+  end
+
+  defp set_symbol(investment) do
+
+    case Securities.get_stock_by_id(investment.stock_id) do
+      nil ->
+        investment
+      stock ->
+        investment
+        |> Map.put(:symbol, stock.symbol)
+    end
+  end
+    
 
   @doc """
   Creates a investment.

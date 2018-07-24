@@ -16,7 +16,13 @@
       <header class="header">
         <nav role="navigation">
           <ul class="nav nav-pills pull-right">
-            <li><a href="http://www.phoenixframework.org/docs">Get Started</a></li>
+            <%= if @user_signed_in? do %>
+              <li><%= link "Stocks", to: stock_path(@conn, :index), class: "btn btn-outline-primary" %></li>
+              <li><%= link "Portfolios", to: portfolio_path(@conn, :index), class: "btn btn-outline-primary" %></li>
+              <li><%= link "Sign Out", to: session_path(@conn, :signout), class: "btn btn-outline-primary" %></li>
+            <% else %>
+              <li><%= link "Sign In", to: session_path(@conn, :new), class: "btn btn-outline-primary" %></li>
+            <% end %>
           </ul>
         </nav>
         <span class="logo"></span>

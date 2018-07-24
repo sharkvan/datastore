@@ -34,5 +34,5 @@
 
 </ul>
 
-<span><%= link "Edit", to: investment_path(@conn, :edit, @investment) %></span>
-<span><%= link "Back", to: investment_path(@conn, :index) %></span>
+<span><%= link "Edit", to: portfolio_investment_path(@conn, :edit, @portfolio_id, @investment) %></span>
+<span><%= link "Back", to: portfolio_investment_path(@conn, :index, @portfolio_id) %></span>

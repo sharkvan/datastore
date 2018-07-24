@@ -1,13 +1,9 @@
-<h2>Show Portfolio</h2>
+<h2><%= @portfolio.name%></h2>
 
-<ul>
-
-  <li>
-    <strong>Name:</strong>
-    <%= @portfolio.name %>
-  </li>
-
-</ul>
+<%= 
+    investments = StockCraz.Portfolios.list_investments(@portfolio.id)
+    render WebUi.InvestmentView, "index.html", conn: @conn, portfolio_id: @portfolio.id, investments: investments
+%>
 
 <span><%= link "Edit", to: portfolio_path(@conn, :edit, @portfolio) %></span>
 <span><%= link "Back", to: portfolio_path(@conn, :index) %></span>
