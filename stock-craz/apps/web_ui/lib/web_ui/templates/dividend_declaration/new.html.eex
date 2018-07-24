@@ -1,0 +1,5 @@
+<h2>New Dividend declaration</h2>
+
+<%= render "form.html", Map.put(assigns, :action, dividend_declaration_path(@conn, :create)) %>
+
+<span><%= link "Back", to: dividend_declaration_path(@conn, :index) %></span>

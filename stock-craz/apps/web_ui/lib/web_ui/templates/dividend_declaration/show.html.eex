@@ -1,0 +1,38 @@
+<h2>Show Dividend declaration</h2>
+
+<ul>
+
+  <li>
+    <strong>Stock:</strong>
+    <%= @dividend_declaration.stock_id %>
+  </li>
+
+  <li>
+    <strong>Pay date:</strong>
+    <%= @dividend_declaration.pay_date %>
+  </li>
+
+  <li>
+    <strong>Ex date:</strong>
+    <%= @dividend_declaration.ex_date %>
+  </li>
+
+  <li>
+    <strong>Rec date:</strong>
+    <%= @dividend_declaration.rec_date %>
+  </li>
+
+  <li>
+    <strong>Dec date:</strong>
+    <%= @dividend_declaration.dec_date %>
+  </li>
+
+  <li>
+    <strong>Amount:</strong>
+    <%= @dividend_declaration.amount %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: dividend_declaration_path(@conn, :edit, @dividend_declaration) %></span>
+<span><%= link "Back", to: dividend_declaration_path(@conn, :index) %></span>

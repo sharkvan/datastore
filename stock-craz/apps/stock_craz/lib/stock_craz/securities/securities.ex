@@ -6,6 +6,7 @@ defmodule StockCraz.Securities do
   import Ecto.Query, warn: false
   alias StockCraz.Repo
   alias StockCraz.Securities.Stock
+  alias StockCraz.Securities.DividendDeclaration
 
   @doc """
   Returns all the stocks in the systems
@@ -89,8 +90,6 @@ defmodule StockCraz.Securities do
   def change_stock(%Stock{} = stock) do
     Stock.changeset(stock, %{})
   end
-
-  alias StockCraz.Securities.DividendDeclaration
 
   @doc """
   Returns the list of dividend_declarations.
