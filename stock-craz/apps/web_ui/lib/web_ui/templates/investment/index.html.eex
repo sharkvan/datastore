@@ -18,7 +18,7 @@
     <tr>
       <td><%= investment.symbol %></td>
       <td><%= investment.cost_basis %></td>
-      <td><%= investment.investment_date %></td>
+      <td><%= to_short_date(investment.investment_date) %></td>
       <td><%= investment.starting_shares %></td>
       <td><%= investment.shares %></td>
       <td><%= investment.target_roi %></td>

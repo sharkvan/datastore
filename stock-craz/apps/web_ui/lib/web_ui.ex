@@ -40,6 +40,7 @@ defmodule WebUi do
       import WebUi.Router.Helpers
       import WebUi.ErrorHelpers
       import WebUi.Gettext
+      import WebUi.Formatters.Date
     end
   end
 
