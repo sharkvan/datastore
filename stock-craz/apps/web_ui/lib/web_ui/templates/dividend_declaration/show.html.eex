@@ -3,11 +3,6 @@
 <ul>
 
   <li>
-    <strong>Stock:</strong>
-    <%= @dividend_declaration.stock_id %>
-  </li>
-
-  <li>
     <strong>Pay date:</strong>
     <%= @dividend_declaration.pay_date %>
   </li>
@@ -34,5 +29,5 @@
 
 </ul>
 
-<span><%= link "Edit", to: dividend_declaration_path(@conn, :edit, @dividend_declaration) %></span>
-<span><%= link "Back", to: dividend_declaration_path(@conn, :index) %></span>
+<span><%= link "Edit", to: stock_dividend_declaration_path(@conn, :edit, @symbol, @dividend_declaration) %></span>
+<span><%= link "Back", to: stock_dividend_declaration_path(@conn, :index, @symbol) %></span>

@@ -4,6 +4,8 @@ defmodule StockCraz.Securities.DividendDeclaration do
 
 
   schema "dividend_declarations" do
+    field :symbol, :string, virtual: true
+
     field :amount, :decimal
     field :dec_date, :utc_datetime
     field :ex_date, :utc_datetime

@@ -6,12 +6,6 @@
   <% end %>
 
   <div class="form-group">
-    <%= label f, :stock_id, class: "control-label" %>
-    <%= number_input f, :stock_id, class: "form-control" %>
-    <%= error_tag f, :stock_id %>
-  </div>
-
-  <div class="form-group">
     <%= label f, :pay_date, class: "control-label" %>
     <%= datetime_select f, :pay_date, class: "form-control" %>
     <%= error_tag f, :pay_date %>

@@ -8,6 +8,18 @@ defmodule StockCraz.Securities do
   alias StockCraz.Securities.Stock
   alias StockCraz.Securities.DividendDeclaration
 
+  defp get_or_create_Stock(symbol) do
+    get_stock(symbol)
+    |> case do
+      nil ->
+        case create_stock(%{symbol: symbol}) do
+          {:ok, stock} -> stock
+          {:error, _} -> nil
+        end
+      stock -> stock
+    end
+  end
+
   @doc """
   Returns all the stocks in the systems
 
@@ -23,25 +35,29 @@ defmodule StockCraz.Securities do
 
   @doc """
   Gets a single stock.
-  
+
   ## Examples
 
     iex> get_stock("OXLC")
     %Stock{}
-  
-  """
-  def get_stock(symbol) do
-    query = from sec in Stock,
-      where: sec.symbol == ^symbol
 
-    Repo.one(query)
+  """
+  defp get_stock_query(symbol) do
+    symbol_upcase = String.upcase(symbol)
+    query = from sec in Stock,
+      where: sec.symbol == ^symbol_upcase
   end
 
-  def get_stock!(symbol) do 
-    query = from sec in Stock,
-      where: sec.symbol == ^symbol
+  def get_stock(symbol) do
+    symbol
+    |> get_stock_query
+    |> Repo.one
+  end
 
-    Repo.one!(query)
+  def get_stock!(symbol) do
+    symbol
+    |> get_stock_query
+    |> Repo.one
   end
 
   def get_stock_by_id(id) do
@@ -50,15 +66,15 @@ defmodule StockCraz.Securities do
 
   @doc """
   Create a stock record
-  
+
   #Examples
 
     iex> create_stock(%{symbol:"OXLC"})
     {ok: %Stock{}}
-    
+
     iex> create_stock(%{ysmbol: ""})
     {:error, %Ecto.Changeset{}}
-    
+
   """
   def create_stock(attrs \\ %{}) do
     %Stock{}
@@ -100,8 +116,14 @@ defmodule StockCraz.Securities do
       [%DividendDeclaration{}, ...]
 
   """
-  def list_dividend_declarations do
-    Repo.all(DividendDeclaration)
+  def list_dividend_declarations(symbol) do
+    stock = get_stock(symbol)
+
+    query = from d in DividendDeclaration,
+            where: d.stock_id == ^stock.id
+
+    Repo.all(query)
+    |> Enum.map( &(Map.put(&1, :symbol, symbol)))
   end
 
   @doc """
@@ -118,7 +140,12 @@ defmodule StockCraz.Securities do
       ** (Ecto.NoResultsError)
 
   """
-  def get_dividend_declaration!(id), do: Repo.get!(DividendDeclaration, id)
+  def get_dividend_declaration!(id) do
+    dividend = Repo.get!(DividendDeclaration, id)
+    stock = get_stock_by_id(dividend.stock_id)
+
+    Map.put(dividend, :symbol, stock.symbol)
+  end
 
   @doc """
   Creates a dividend_declaration.
@@ -132,10 +159,19 @@ defmodule StockCraz.Securities do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_dividend_declaration(attrs \\ %{}) do
+  def create_dividend_declaration(attrs \\ %{}, symbol) do
+    stock = get_or_create_Stock(symbol)
+    attrs = Map.put(attrs, :stock_id, stock.id)
+
     %DividendDeclaration{}
     |> DividendDeclaration.changeset(attrs)
     |> Repo.insert()
+    |> case do
+        {:ok, div} ->
+          {:ok, %{ div | symbol: stock.symbol}}
+        {:error, changeset} ->
+          {:error, changeset}
+    end
   end
 
   @doc """
@@ -150,10 +186,18 @@ defmodule StockCraz.Securities do
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_dividend_declaration(%DividendDeclaration{} = dividend_declaration, attrs) do
+  def update_dividend_declaration(%DividendDeclaration{} = dividend_declaration, attrs, symbol) do
+    stock = get_or_create_Stock(symbol)
+    attrs = Map.put(attrs, :stock_id, stock.id)
     dividend_declaration
     |> DividendDeclaration.changeset(attrs)
     |> Repo.update()
+    |> case do
+        {:ok, div} ->
+          {:ok, %{ div | symbol: stock.symbol}}
+        {:error, changeset} ->
+          {:error, changeset}
+    end
   end
 
   @doc """

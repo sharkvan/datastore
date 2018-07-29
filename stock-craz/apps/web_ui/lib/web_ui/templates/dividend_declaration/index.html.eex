@@ -3,7 +3,6 @@
 <table class="table">
   <thead>
     <tr>
-      <th>Stock</th>
       <th>Pay date</th>
       <th>Ex date</th>
       <th>Rec date</th>
@@ -16,7 +15,6 @@
   <tbody>
 <%= for dividend_declaration <- @dividend_declarations do %>
     <tr>
-      <td><%= dividend_declaration.stock_id %></td>
       <td><%= dividend_declaration.pay_date %></td>
       <td><%= dividend_declaration.ex_date %></td>
       <td><%= dividend_declaration.rec_date %></td>
@@ -24,13 +22,13 @@
       <td><%= dividend_declaration.amount %></td>
 
       <td class="text-right">
-        <span><%= link "Show", to: dividend_declaration_path(@conn, :show, dividend_declaration), class: "btn btn-default btn-xs" %></span>
-        <span><%= link "Edit", to: dividend_declaration_path(@conn, :edit, dividend_declaration), class: "btn btn-default btn-xs" %></span>
-        <span><%= link "Delete", to: dividend_declaration_path(@conn, :delete, dividend_declaration), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+        <span><%= link "Show", to: stock_dividend_declaration_path(@conn, :show, @symbol, dividend_declaration), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: stock_dividend_declaration_path(@conn, :edit, @symbol, dividend_declaration), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: stock_dividend_declaration_path(@conn, :delete, @symbol, dividend_declaration), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
       </td>
     </tr>
 <% end %>
   </tbody>
 </table>
 
-<span><%= link "New Dividend declaration", to: dividend_declaration_path(@conn, :new) %></span>
+<span><%= link "New Dividend declaration", to: stock_dividend_declaration_path(@conn, :new, @symbol) %></span>

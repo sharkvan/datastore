@@ -18,6 +18,8 @@ defmodule WebUi.InvestmentController do
     render(conn, "new.html", changeset: changeset)
   end
 
+  defp get_or_create_Stock(%{"symbol" => nil} = investment), do: investment
+
   defp get_or_create_Stock(investment) do
     stock = StockCraz.Securities.get_stock(investment["symbol"])
     |> case do
