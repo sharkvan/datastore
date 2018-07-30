@@ -41,6 +41,7 @@ defmodule WebUi do
       import WebUi.ErrorHelpers
       import WebUi.Gettext
       import WebUi.Formatters.Date
+      import WebUi.Formatters.Currency
     end
   end
 

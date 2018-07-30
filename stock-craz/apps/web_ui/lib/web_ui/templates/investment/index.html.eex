@@ -17,7 +17,7 @@
 <%= for investment <- @investments do %>
     <tr>
       <td><%= investment.symbol %></td>
-      <td><%= investment.cost_basis %></td>
+      <td><div class="currency"><%= to_short_currency(investment.cost_basis) %></div></td>
       <td><%= to_short_date(investment.investment_date) %></td>
       <td><%= investment.starting_shares %></td>
       <td><%= investment.shares %></td>
