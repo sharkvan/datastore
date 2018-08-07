@@ -57,7 +57,7 @@ defmodule StockCraz.Securities do
   def get_stock!(symbol) do
     symbol
     |> get_stock_query
-    |> Repo.one
+    |> Repo.one!
   end
 
   def get_stock_by_id(id) do

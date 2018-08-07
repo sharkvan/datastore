@@ -1,0 +1,1 @@
+<div class="currency"><%= to_short_currency(@price) %></div>

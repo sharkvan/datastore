@@ -42,6 +42,23 @@ defmodule WebUi do
       import WebUi.Gettext
       import WebUi.Formatters.Date
       import WebUi.Formatters.Currency
+      import WebUi.Formatters.Percentage
+
+      def render_shared(template, assigns \\ %{}) do
+        render WebUi.SharedView, template, assigns
+      end
+
+      def render_stock_price(price) do
+        render_shared "stock_price.html", price: price
+      end
+
+      def render_stock_shares(shares) do
+        render_shared "stock_shares.html", share: shares
+      end
+
+      def render_stock_roi(ratio) do
+        render_shared "rate-of-return.html", roi: ratio
+      end
     end
   end
 

@@ -26,7 +26,7 @@ body, form, ul, table {
   height: 71px;
   display: inline-block;
   margin-bottom: 1em;
-  background-image: url("/images/phoenix.png");
+  background-image: url("/images/investorloop.svg");
   background-size: 519px 71px;
 }
 
@@ -40,7 +40,9 @@ body, form, ul, table {
 /* Customize container */
 @media (min-width: 768px) {
   .container {
-    max-width: 730px;
+    margin-left:25px;
+    margin-right:25px;
+    /*max-width: 1030px;*/
   }
 }
 .container-narrow > hr {
@@ -55,7 +57,7 @@ body, form, ul, table {
 
 /* Supporting marketing content */
 .marketing {
-  margin: 35px 0;
+  margin: 0px 0;
 }
 
 /* Responsive: Portrait tablets and up */

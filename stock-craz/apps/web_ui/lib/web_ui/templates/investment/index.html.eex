@@ -4,12 +4,30 @@
   <thead>
     <tr>
       <th>Stock</th>
-      <th>Cost basis</th>
-      <th>Investment date</th>
-      <th>Starting shares</th>
-      <th>Shares</th>
-      <th>Target roi</th>
-
+      <th>Current Allocation</th>
+      <th>Yield</th>
+      <th>Dividend Yield</th>
+      <th>Dividend Frequency</th>
+      <th>Pay QTR Month</th>
+      <th>Investment Date</th>
+      <th>Investment QTR</th>
+      <th>Sector</th>
+      <th>Industry</th>
+      <th>Starting Shares</th>
+      <th>Purchase Price</th>
+      <th>Cost Basis</th>
+      <th>Current Shares</th>
+      <th>Current Price</th>
+      <th>Current Value</th>
+      <th>Next Ex-Date</th>
+      <th>Next Pay-Date</th>
+      <th>Next Div Amount</th>
+      <th>Project Div</th>
+      <th>Potential Div</th>
+      <th>Target ROI</th>
+      <th>Target Price</th>
+      <th>Share to Sell</th>
+      <th>Current ROI</th>
       <th></th>
     </tr>
   </thead>
@@ -17,11 +35,31 @@
 <%= for investment <- @investments do %>
     <tr>
       <td><%= investment.symbol %></td>
-      <td><div class="currency"><%= to_short_currency(investment.cost_basis) %></div></td>
+      <td><%= to_short_percentage(investment.current_allocation) %></td>
+      <td><%= to_short_percentage(investment.yield) %></td>
+      <td><%= %></td>
+      <td><%= %></td>
+      <td><%= %></td>
       <td><%= to_short_date(investment.investment_date) %></td>
-      <td><%= investment.starting_shares %></td>
-      <td><%= investment.shares %></td>
-      <td><%= investment.target_roi %></td>
+      <td><%= investment.investment_qtr %></td>
+      <td><%= %></td>
+      <td><%= %></td>
+      <td><div class="pull-right"><%= investment.starting_shares %></div></td>
+      <td><%= render_stock_price investment.purchase_price %></td>
+      <td><%= render_stock_price investment.cost_basis %></td>
+      <td><div class="pull-right"><%= investment.shares %></div></td>
+      <td><%= %></td>
+      <td><%= render_stock_price investment.current_value %></td>
+      <td><%= %></td>
+      <td><%= %></td>
+      <td><%= %></td>
+      <td><%= investment.projected_dividend %></td>
+      <td><%= investment.potential_dividend %></td>
+      <td><%= render_stock_roi investment.target_roi %></td>
+      <td><%= investment.target_sell_price %></td>
+      <td><%= investment.target_sell_shares %></td>
+      <td><%= investment.current_roi %></td>
+      <td><%= %></td>
 
       <td class="text-right">
         <span><%= link "Show", to: portfolio_investment_path(@conn, :show, investment.portfolio_id, investment), class: "btn btn-default btn-xs" %></span>

@@ -18,10 +18,10 @@
     <tr>
       <td><%= stock.symbol %></td>
       <td><%= stock.name %></td>
-      <td><%= stock.price %></td>
-      <td><%= stock.eps %></td>
-      <td><%= stock.price_high_year %></td>
-      <td><%= stock.price_low_year %></td>
+      <td><%= render_stock_price stock.price %></td>
+      <td><%= render_stock_price stock.eps %></td>
+      <td><%= render_stock_price stock.price_high_year %></td>
+      <td><%= render_stock_price stock.price_low_year %></td>
 
       <td class="text-right">
         <span><%= link "Show", to: stock_path(@conn, :show, stock), class: "btn btn-default btn-xs" %></span>

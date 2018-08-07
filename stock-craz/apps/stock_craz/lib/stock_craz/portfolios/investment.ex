@@ -5,14 +5,23 @@ defmodule StockCraz.Portfolios.Investment do
 
   schema "investments" do
     field :symbol, :string, virtual: true
-
     field :portfolio_id, :integer
+    field :current_allocation, :decimal
+    field :yield, :decimal
     field :stock_id, :integer
     field :cost_basis, :decimal
     field :investment_date, :utc_datetime
+    field :investment_qtr, :string
     field :shares, :decimal
     field :starting_shares, :integer
     field :target_roi, :decimal
+    field :purchase_price, :decimal
+    field :current_value, :decimal
+    field :projected_dividend, :decimal
+    field :potential_dividend, :decimal
+    field :target_sell_price, :decimal
+    field :target_sell_shares, :integer
+    field :current_roi, :decimal
 
     timestamps()
 
