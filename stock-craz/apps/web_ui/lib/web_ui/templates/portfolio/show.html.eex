@@ -1,7 +1,7 @@
 <h2><%= @portfolio.name%></h2>
 
 <%= 
-    investments = StockCraz.Portfolios.list_investments(@portfolio.id)
+    investments = StockCraz.Portfolios.list_investment_views(@portfolio.id)
     render WebUi.InvestmentView, "index.html", conn: @conn, portfolio_id: @portfolio.id, investments: investments
 %>
 

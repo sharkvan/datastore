@@ -9,7 +9,7 @@ defmodule WebUi.InvestmentController do
   # portfolio that is being requested.
 
   def index(conn, %{"portfolio_id" => portfolio_id}) do
-    investments = Portfolios.list_investments(portfolio_id)
+    investments = Portfolios.list_investment_views(portfolio_id)
     render(conn, "index.html", investments: investments, portfolio_id: portfolio_id)
   end
 

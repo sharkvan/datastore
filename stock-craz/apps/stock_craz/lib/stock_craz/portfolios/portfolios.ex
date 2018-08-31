@@ -8,6 +8,8 @@ defmodule StockCraz.Portfolios do
   alias StockCraz.Portfolios.Portfolio
   alias StockCraz.Portfolios.Investment
   alias StockCraz.Securities
+  alias StockCraz.Securities.{Stock, DividendDeclaration}
+  alias StockCraz.Portfolios.InvestmentViewModel
 
   @doc """
   Returns the list of portfolios.
@@ -114,9 +116,13 @@ defmodule StockCraz.Portfolios do
 
   """
   def list_investments(portfolio_id) do
+    get_investments(portfolio_id)
+    |> Enum.map(&set_symbol/1)
+  end
+
+  defp get_investments(portfolio_id) do
     query = from i in Investment, where: i.portfolio_id == ^portfolio_id
     Repo.all(query)
-    |> Enum.map(&set_symbol/1)
   end
 
   @doc """
@@ -216,5 +222,21 @@ defmodule StockCraz.Portfolios do
   """
   def change_investment(%Investment{} = investment) do
     Investment.changeset(investment, %{})
+  end
+
+  def list_investment_views(portfolio_id) do
+    query = from i in Investment,
+      join: s in Stock, on: i.stock_id == s.id,
+      left_join: dd in DividendDeclaration, on: dd.stock_id == s.id,
+      where: i.portfolio_id == ^portfolio_id,
+      select: {i,s,dd}
+
+    Repo.all(query)
+    |> Stream.map( fn({investment, stock, div_dec}) ->
+      InvestmentViewModel.load(%InvestmentViewModel{}, investment)
+      |> InvestmentViewModel.load(stock)
+      |> InvestmentViewModel.load(div_dec)
+    end
+    )
   end
 end

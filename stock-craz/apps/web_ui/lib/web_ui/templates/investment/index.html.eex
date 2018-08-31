@@ -37,29 +37,29 @@
       <td><%= investment.symbol %></td>
       <td><%= to_short_percentage(investment.current_allocation) %></td>
       <td><%= to_short_percentage(investment.yield) %></td>
-      <td><%= %></td>
-      <td><%= %></td>
-      <td><%= %></td>
+      <td><%= to_short_percentage(investment.dividend_yield) %></td>
+      <td><%= investment.dividend_frequency %></td>
+      <td><%= investment.dividend_pay_qtr_month %></td>
       <td><%= to_short_date(investment.investment_date) %></td>
       <td><%= investment.investment_qtr %></td>
-      <td><%= %></td>
-      <td><%= %></td>
+      <td><%= investment.sector %></td>
+      <td><%= "TBD"%></td>
       <td><div class="pull-right"><%= investment.starting_shares %></div></td>
       <td><%= render_stock_price investment.purchase_price %></td>
       <td><%= render_stock_price investment.cost_basis %></td>
-      <td><div class="pull-right"><%= investment.shares %></div></td>
-      <td><%= %></td>
+      <td><div class="pull-right"><%= investment.current_shares %></div></td>
+      <td><%= render_stock_price investment.current_price %></td>
       <td><%= render_stock_price investment.current_value %></td>
-      <td><%= %></td>
-      <td><%= %></td>
-      <td><%= %></td>
+      <td><%= "TBD"%></td>
+      <td><%= "TBD"%></td>
+      <td><%= "TBD"%></td>
       <td><%= investment.projected_dividend %></td>
       <td><%= investment.potential_dividend %></td>
       <td><%= render_stock_roi investment.target_roi %></td>
       <td><%= investment.target_sell_price %></td>
       <td><%= investment.target_sell_shares %></td>
       <td><%= investment.current_roi %></td>
-      <td><%= %></td>
+      <td><%= "TBD"%></td>
 
       <td class="text-right">
         <span><%= link "Show", to: portfolio_investment_path(@conn, :show, investment.portfolio_id, investment), class: "btn btn-default btn-xs" %></span>
