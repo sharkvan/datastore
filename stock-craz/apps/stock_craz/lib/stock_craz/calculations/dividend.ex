@@ -11,39 +11,27 @@ defmodule StockCraz.Calculations.Dividend do
       |> gte.(-365)
     end )
     |> Stream.transform(
-      {},
+      nil,
       fn 
-        pay_date, {} -> {0, {0, 0, pay_date}}
-        pay_date, {0, 0, last_date} ->
+        pay_date, nil -> {[0], pay_date}
+        pay_date, last_date -> 
           {
-            Date.diff(last_date, pay_date),
-            1,
+            [Date.diff(last_date, pay_date)], 
             pay_date
-          }
-        pay_date, {sum, counter, last_date} -> 
-          sum = sum + Date.diff(last_date, pay_date)
-          {
-            sum / counter,
-            {
-              sum,
-              counter+1,
-              pay_date
-            }
           }
       end
     )
-    |> Enum.to_list() 
-    # |> Enum.reduce(
-    # #  {},
-    # #  fn
-    # #    distance, {} -> {distance, 1}
-    # #    distance, {sum, counter} ->
-    # #      {sum + distance, counter + 1}
-    # #  end
-    # #)
-    # #|> (fn {sum, counter} ->
-    # #  sum / counter
-    # #end).()
+    |> Enum.reduce(
+      {},
+      fn
+        distance, {} -> {distance, 1}
+        distance, {sum, counter} ->
+          {sum + distance, counter + 1}
+      end
+    )
+    |> (fn {sum, counter} ->
+      sum / counter
+    end).()
     # I need an accumulator that will take the
     # previous item and current item and return the
     # distance between the two dates. Then I should 
