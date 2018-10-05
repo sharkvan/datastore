@@ -168,6 +168,7 @@ defmodule StockCraz.Securities do
     |> Repo.insert()
     |> case do
         {:ok, div} ->
+          #This is the place to post to a genstage.
           {:ok, %{ div | symbol: stock.symbol}}
         {:error, changeset} ->
           {:error, changeset}
@@ -193,7 +194,12 @@ defmodule StockCraz.Securities do
     |> DividendDeclaration.changeset(attrs)
     |> Repo.update()
     |> case do
-        {:ok, div} ->
+      {:ok, div} ->
+        # Post to genstage here too.
+        # Flip sign of each integer and send two events
+        # One delete on insert
+        # The delete event would be based on the old 
+        # state of the record
           {:ok, %{ div | symbol: stock.symbol}}
         {:error, changeset} ->
           {:error, changeset}
@@ -213,6 +219,8 @@ defmodule StockCraz.Securities do
 
   """
   def delete_dividend_declaration(%DividendDeclaration{} = dividend_declaration) do
+    #How should we handle this with genstage?
+    #By flipping the sign of each integer
     Repo.delete(dividend_declaration)
   end
 

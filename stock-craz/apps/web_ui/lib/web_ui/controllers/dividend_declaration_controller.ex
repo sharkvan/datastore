@@ -38,12 +38,17 @@ defmodule WebUi.DividendDeclarationController do
     |> Securities.create_dividend_declaration(symbol)
     |> case do
       {:ok, dividend_declaration} ->
+        # Pipe the declaration here to a genstage.
         conn
         |> put_flash(:info, "Dividend declaration created successfully.")
         |> redirect(to: stock_dividend_declaration_path(conn, :show, symbol, dividend_declaration))
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset, symbol: symbol)
     end
+    # Update this to use the genstage framework. We can take the
+    # record being created here and post it to the a genstage for dividend
+    # declarations. Then we can update a view store with the data after saving
+    # it to the database.
   end
 
   def show(conn, %{"id" => id, "stock_symbol" => symbol}) do

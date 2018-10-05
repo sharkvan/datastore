@@ -1,50 +1,87 @@
 defmodule StockCraz.Calculations.Dividend do
     
-  @spec pay_frequency(Date.t, [Date.t]) :: :MTH | :QTR | :BIA | :ANN | :STP
-  def pay_frequency(baseDate, payDates) do
+  alias StockCraz.Securities.DividendDeclaration
+
+  @spec next_payment([%DividendDeclaration{}], Date.t) :: %DividendDeclaration{}
+  def next_payment(dividends, base_date) do
+    dividends
+    |> List.foldl(%DividendDeclaration{}, &max_paydate/2)
+  end
+
+  defp max_paydate(%DividendDeclaration{:pay_date => left_date} = left, %DividendDeclaration{:pay_date => right_date} = right) when right_date == nil, do: left
+
+  defp max_paydate(%DividendDeclaration{:pay_date => left_date} = left, %DividendDeclaration{:pay_date => right_date} = right) do
+      case Date.compare(DateTime.to_date(left_date), right_date) do
+          :lt -> right
+          :gt -> left
+          :eq -> right
+      end
+  end
+
+  @spec pay_frequency([Date.t | %DividendDeclaration{}], Date.t) :: :MTH | :QTR | :BIA | :ANN | :STP
+  def pay_frequency(items, base_date) do
     gte = &>=/2
 
-    payDates
+    items
+    |> Stream.map( fn 
+        %DividendDeclaration{} = dividend -> DateTime.to_date(dividend.pay_date) 
+        %Date{} = date -> date
+    end)
     |> Enum.sort(gte)
     |> Stream.filter(fn(x) ->
-      Date.diff(x, baseDate)
+      Date.diff(x, base_date)
       |> gte.(-365)
     end )
     |> Stream.transform(
-      nil,
-      fn 
-        pay_date, nil -> {[0], pay_date}
-        pay_date, last_date -> 
-          {
-            [Date.diff(last_date, pay_date)], 
-            pay_date
-          }
-      end
-    )
-    |> Enum.reduce(
       {},
-      fn
-        distance, {} -> {distance, 1}
-        distance, {sum, counter} ->
-          {sum + distance, counter + 1}
-      end
+      &transform_item/2
     )
-    |> (fn {sum, counter} ->
-      sum / counter
-    end).()
-    # I need an accumulator that will take the
-    # previous item and current item and return the
-    # distance between the two dates. Then I should 
-    # have a list of distances. Looking at the first 
-    # item and the average of the last four items
-    # I should be able to determine the frequency.
-    #
+    |> Enum.at(-1)
+    |> period_to_frequency()
   end
 
-  def frq_multiplier("MTH"), do: 12
-  def frq_multiplier("QTR"), do: 4
-  def frq_multiplier("BIA"), do: 2
-  def frq_multiplier("ANN"), do: 1
-  def frq_multiplier("STP"), do: 0
+  defp transform_item(pay_date, accumlator) do
+    case accumlator do
+      {} -> {[0], {0, 0, pay_date}}
+      {0, counter, last_date} -> 
+        build_transform_result(
+          Date.diff(last_date, pay_date),
+          counter + 1,
+          pay_date)
+      {sum, counter, last_date} -> 
+        build_transform_result(
+          sum + Date.diff(last_date, pay_date),
+          counter + 1,
+          pay_date)
+    end
+  end
+
+  defp period_to_frequency(average_period) do
+    cond do
+      average_period == 0 -> :STP
+      average_period < 50 -> :MTH
+      average_period < 100 -> :QTR
+      average_period < 215 -> :BIA
+      average_period < 370 -> :ANN
+      true -> :STP
+    end
+  end
+
+  defp build_transform_result(sum, counter, last_date) do
+    {
+      [sum / counter],
+      {
+        sum,
+        counter,
+        last_date
+      }
+    }
+  end
+
+  def frq_multiplier(:MTH), do: 12
+  def frq_multiplier(:QTR), do: 4
+  def frq_multiplier(:BIA), do: 2
+  def frq_multiplier(:ANN), do: 1
+  def frq_multiplier(:STP), do: 0
   def frq_multiplier(_), do: 4
 end

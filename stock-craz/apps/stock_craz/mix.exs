@@ -36,6 +36,7 @@ defmodule StockCraz.Mixfile do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:gen_stage, "~> 0.11"},
       {:postgrex, ">= 0.0.0"},
       {:ecto, "~> 2.1"}
     ]
