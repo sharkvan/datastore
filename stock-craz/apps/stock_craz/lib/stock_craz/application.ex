@@ -14,6 +14,8 @@ defmodule StockCraz.Application do
 
     Supervisor.start_link([
       supervisor(StockCraz.Repo, []),
+      supervisor(StockCraz.GenStage.Producers.DividendDeclaration, []),
+      supervisor(StockCraz.GenStage.Consumers.DividendDeclaration, []),
     ], strategy: :one_for_one, name: StockCraz.Supervisor)
   end
 end

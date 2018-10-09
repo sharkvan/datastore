@@ -35,14 +35,15 @@ defmodule WebUi.DividendDeclarationController do
     dividend_declaration_params
     |> to_dividend_declaration
     |> Map.from_struct
-    |> Securities.create_dividend_declaration(symbol)
+    |> Securities.change_dividend_declaration(symbol)
+    |> IO.inspect
     |> case do
-      {:ok, dividend_declaration} ->
-        # Pipe the declaration here to a genstage.
+      %{:valid? => true} = dividend_declaration ->
+        StockCraz.GenStage.Producers.DividendDeclaration.insert_event({dividend_declaration, symbol})
         conn
-        |> put_flash(:info, "Dividend declaration created successfully.")
-        |> redirect(to: stock_dividend_declaration_path(conn, :show, symbol, dividend_declaration))
-      {:error, %Ecto.Changeset{} = changeset} ->
+        |> put_flash(:info, "Dividend declaration is being processed.")
+        |> redirect(to: stock_dividend_declaration_path(conn, :index, symbol))
+      %{:valid? => false} = changeset ->
         render(conn, "new.html", changeset: changeset, symbol: symbol)
     end
     # Update this to use the genstage framework. We can take the

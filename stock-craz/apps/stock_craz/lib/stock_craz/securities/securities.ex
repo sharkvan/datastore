@@ -159,6 +159,11 @@ defmodule StockCraz.Securities do
       {:error, %Ecto.Changeset{}}
 
   """
+  def create_dividend_declaration(%Ecto.Changeset{} = dividend_declaration, symbol) do
+    dividend_declaration
+    |> Repo.insert()
+  end
+
   def create_dividend_declaration(attrs \\ %{}, symbol) do
     stock = get_or_create_Stock(symbol)
     attrs = Map.put(attrs, :stock_id, stock.id)
@@ -233,7 +238,10 @@ defmodule StockCraz.Securities do
       %Ecto.Changeset{source: %DividendDeclaration{}}
 
   """
-  def change_dividend_declaration(%DividendDeclaration{} = dividend_declaration) do
-    DividendDeclaration.changeset(dividend_declaration, %{})
+  def change_dividend_declaration(attrs \\ %{}, symbol) do
+    stock = get_or_create_Stock(symbol)
+    attrs = Map.put(attrs, :stock_id, stock.id)
+
+    DividendDeclaration.changeset(%DividendDeclaration{}, attrs)
   end
 end
