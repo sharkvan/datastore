@@ -27,7 +27,7 @@ defmodule WebUi.DividendDeclarationController do
   end
 
   def new(conn, %{"stock_symbol" => symbol}) do
-    changeset = Securities.change_dividend_declaration(%DividendDeclaration{})
+    changeset = Securities.change_dividend_declaration(%{}, symbol)
     render(conn, "new.html", changeset: changeset, symbol: symbol)
   end
 
@@ -35,21 +35,25 @@ defmodule WebUi.DividendDeclarationController do
     dividend_declaration_params
     |> to_dividend_declaration
     |> Map.from_struct
-    |> Securities.change_dividend_declaration(symbol)
-    |> IO.inspect
+    |> Securities.create_dividend_declaration(symbol)
     |> case do
-      %{:valid? => true} = dividend_declaration ->
-        StockCraz.GenStage.Producers.DividendDeclaration.insert_event({dividend_declaration, symbol})
+      {:ok, _} ->
         conn
         |> put_flash(:info, "Dividend declaration is being processed.")
         |> redirect(to: stock_dividend_declaration_path(conn, :index, symbol))
-      %{:valid? => false} = changeset ->
+      {:error, changeset} ->
         render(conn, "new.html", changeset: changeset, symbol: symbol)
     end
-    # Update this to use the genstage framework. We can take the
-    # record being created here and post it to the a genstage for dividend
-    # declarations. Then we can update a view store with the data after saving
-    # it to the database.
+    # update this to go back to the normal looking changeset result.
+    # I want to setup the securities.create_dividend_declaration function
+    # to use Ecto apply_action. 
+    # * Take in form values
+    # * map to struct
+    # * call Securities function
+    # ** send to GenStage async
+    # ** consumer saves record to database
+    # ** consumer updates a view store
+    # * return fake ecto result to controller.
   end
 
   def show(conn, %{"id" => id, "stock_symbol" => symbol}) do
@@ -57,9 +61,9 @@ defmodule WebUi.DividendDeclarationController do
     render(conn, "show.html", dividend_declaration: dividend_declaration, symbol: symbol)
   end
 
-  def edit(conn, %{"id" => id, "stock_symbol" => symbol}) do
+  def edit(conn, %{"id" => id, "stock_symbol" => symbol}=params) do
     dividend_declaration = Securities.get_dividend_declaration!(id)
-    changeset = Securities.change_dividend_declaration(dividend_declaration)
+    changeset = Securities.change_dividend_declaration(Map.from_struct(dividend_declaration), symbol)
     render(conn, "edit.html", symbol: symbol, dividend_declaration: dividend_declaration, changeset: changeset)
   end
 

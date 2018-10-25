@@ -17,6 +17,7 @@ defmodule StockCraz.SecuritiesTest do
         |> Enum.into(@valid_attrs)
         |> Securities.create_dividend_declaration(@symbol)
 
+      dividend_declaration = Securities.get_dividend_declaration(@symbol, dividend_declaration.ex_date)
       dividend_declaration
     end
 
@@ -70,7 +71,7 @@ defmodule StockCraz.SecuritiesTest do
 
     test "change_dividend_declaration/1 returns a dividend_declaration changeset" do
       dividend_declaration = dividend_declaration_fixture()
-      assert %Ecto.Changeset{} = Securities.change_dividend_declaration(dividend_declaration)
+      assert %Ecto.Changeset{} = Securities.change_dividend_declaration(dividend_declaration, @symbol)
     end
   end
 end

@@ -10,6 +10,7 @@ defmodule WebUi.DividendDeclarationControllerTest do
 
   def fixture(:dividend_declaration) do
     {:ok, dividend_declaration} = Securities.create_dividend_declaration(@create_attrs, @symbol)
+    dividend_declaration = Securities.get_dividend_declaration(@symbol, dividend_declaration.ex_date)
     dividend_declaration
   end
 
@@ -33,11 +34,8 @@ defmodule WebUi.DividendDeclarationControllerTest do
     test "redirects to show when data is valid", %{conn: conn} do
       conn = post conn, stock_dividend_declaration_path(conn, :create, @symbol), dividend_declaration: @create_attrs
 
-      assert %{id: id} = redirected_params(conn)
-      assert redirected_to(conn) == stock_dividend_declaration_path(conn, :show, @symbol, id)
-
-      conn = get conn, stock_dividend_declaration_path(conn, :show, @symbol, id)
-      assert html_response(conn, 200) =~ "Show Dividend declaration"
+      assert %{stock_symbol: symbol} = redirected_params(conn)
+      assert redirected_to(conn) == stock_dividend_declaration_path(conn, :index, symbol)
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
@@ -50,7 +48,7 @@ defmodule WebUi.DividendDeclarationControllerTest do
     setup [:create_dividend_declaration]
 
     test "renders form for editing chosen dividend_declaration", %{conn: conn, dividend_declaration: dividend_declaration} do
-      conn = get conn, stock_dividend_declaration_path(conn, :edit, @symbol, dividend_declaration)
+      conn = get conn, stock_dividend_declaration_path(conn, :edit, @symbol, dividend_declaration.id)
       assert html_response(conn, 200) =~ "Edit Dividend declaration"
     end
   end
@@ -66,6 +64,10 @@ defmodule WebUi.DividendDeclarationControllerTest do
       assert html_response(conn, 200)
     end
 
+    #To make this work we now need to have redictable ID values.
+    #I think I would like to use a combination of data for this.
+    #TICKER-EX_DATE?
+    #
     test "renders errors when data is invalid", %{conn: conn, dividend_declaration: dividend_declaration} do
       conn = put conn, stock_dividend_declaration_path(conn, :update, @symbol, dividend_declaration.id), dividend_declaration: @invalid_attrs
       assert html_response(conn, 200) =~ "Edit Dividend declaration"

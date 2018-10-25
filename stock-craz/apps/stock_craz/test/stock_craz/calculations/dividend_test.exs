@@ -64,7 +64,7 @@ defmodule StockCraz.Calculations.DividendTest do
           %DividendDeclaration{:id => 3, :pay_date => DateTime.from_iso8601("2018-03-15T00:00:00Z") |> elem(1)},
           %DividendDeclaration{:id => 4, :pay_date => DateTime.from_iso8601("2018-04-15T00:00:00Z") |> elem(1)},
           %DividendDeclaration{:id => 5, :pay_date => DateTime.from_iso8601("2018-05-15T00:00:00Z") |> elem(1)},
-          %DividendDeclaration{:id => 6, :pay_date => DateTime.from_iso8601("2018-06-15T00:00:00Z") |> elem(1)},
+          %DividendDeclaration{:id => 6, :pay_date => DateTime.from_iso8601("2018-06-15T00:00:00Z") |> elem(1)},  
           %DividendDeclaration{:id => 7, :pay_date => DateTime.from_iso8601("2018-07-15T00:00:00Z") |> elem(1)},
           %DividendDeclaration{:id => 8, :pay_date => DateTime.from_iso8601("2018-08-15T00:00:00Z") |> elem(1)}
         ]

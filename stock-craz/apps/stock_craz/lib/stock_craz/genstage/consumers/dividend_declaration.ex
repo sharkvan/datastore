@@ -14,12 +14,21 @@ defmodule StockCraz.GenStage.Consumers.DividendDeclaration do
 
   def handle_events(events, _from, state) do
     IO.inspect ("Handle events")
-    for {dividend_declaration, symbol} <- events do
-      Securities.create_dividend_declaration(dividend_declaration, symbol)
-      |> IO.inspect
+
+    for {opteration, dividend_declaration, symbol} <- events do
+      Task.start(__MODULE__, :handle_event, [opteration, dividend_declaration, symbol])
     end
 
     {:noreply, [], state}
   end
 
+  defp handle_event(:insert, dividend_declaration, symbol) do
+    case Securities.create_dividend_declaration(dividend_declaration, symbol) do
+      {:error, _changeset} ->
+        IO.inspect "Error inserting record"
+        IO.inspect dividend_declaration
+      {:ok, record} ->
+        ViewStores.InvestmentViewServer.add(record)
+    end
+  end
 end

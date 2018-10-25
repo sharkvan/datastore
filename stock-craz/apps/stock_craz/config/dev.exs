@@ -8,3 +8,5 @@ config :stock_craz, StockCraz.Repo,
   database: "stockcraz_dev",
   hostname: "postgres",
   pool_size: 10
+
+config :stock_craz, :dividend_event_producer, StockCraz.GenStage.Producers.DividendDeclaration

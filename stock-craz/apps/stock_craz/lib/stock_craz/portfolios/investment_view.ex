@@ -20,13 +20,13 @@ defmodule StockCraz.Portfolios.InvestmentViewModel do
     field :industry, :string
     field :starting_shares, :integer
     field :purchase_price, :decimal
-    field :cost_basis, :decimal
+    field :cost_basis, :decimal 
     field :current_shares, :decimal
     field :current_price, :decimal
     field :current_value, :decimal
     field :ex_date, :utc_datetime
     field :pay_date, :utc_datetime
-    field :dividend_amount, :utc_datetime
+    field :dividend_amount, :decimal
     field :projected_dividend, :decimal
     field :potential_dividend, :decimal
     field :target_roi, :decimal

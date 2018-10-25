@@ -43,7 +43,7 @@ defmodule StockCraz.Securities do
 
   """
   defp get_stock_query(symbol) do
-    symbol_upcase = String.upcase(symbol)
+    symbol_upcase = String.upcase(symbol, :ascii)
     query = from sec in Stock,
       where: sec.symbol == ^symbol_upcase
   end
@@ -147,6 +147,18 @@ defmodule StockCraz.Securities do
     Map.put(dividend, :symbol, stock.symbol)
   end
 
+  def get_dividend_declaration(symbol, %DateTime{}=ex_date) do
+    case get_stock(symbol) do
+      stock -> 
+        query = from d in DividendDeclaration,
+        where: d.stock_id == ^stock.id and d.ex_date == ^ex_date
+
+        Repo.one(query)
+        |> Map.put(:symbol, stock.symbol)
+      nil -> {:error, "No records for that symbol"}
+    end
+  end
+
   @doc """
   Creates a dividend_declaration.
 
@@ -159,21 +171,28 @@ defmodule StockCraz.Securities do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_dividend_declaration(%Ecto.Changeset{} = dividend_declaration, symbol) do
+  def create_dividend_declaration(%DividendDeclaration{} = dividend_declaration, symbol) do
     dividend_declaration
     |> Repo.insert()
+    |> case do
+      {:ok, div} ->
+        {:ok, %{ div | symbol: symbol}}
+      {:error, changeset} ->
+        {:error, changeset}
+    end
   end
 
+  @dividend_event_producer Application.get_env(:stock_craz, :dividend_event_producer)
   def create_dividend_declaration(attrs \\ %{}, symbol) do
     stock = get_or_create_Stock(symbol)
     attrs = Map.put(attrs, :stock_id, stock.id)
 
     %DividendDeclaration{}
     |> DividendDeclaration.changeset(attrs)
-    |> Repo.insert()
+    |> Ecto.Changeset.apply_action(:insert)
     |> case do
         {:ok, div} ->
-          #This is the place to post to a genstage.
+          @dividend_event_producer.send_event({:insert, div, symbol})
           {:ok, %{ div | symbol: stock.symbol}}
         {:error, changeset} ->
           {:error, changeset}
@@ -203,7 +222,7 @@ defmodule StockCraz.Securities do
         # Post to genstage here too.
         # Flip sign of each integer and send two events
         # One delete on insert
-        # The delete event would be based on the old 
+        # The delete event would be based on the old
         # state of the record
           {:ok, %{ div | symbol: stock.symbol}}
         {:error, changeset} ->
@@ -242,6 +261,10 @@ defmodule StockCraz.Securities do
     stock = get_or_create_Stock(symbol)
     attrs = Map.put(attrs, :stock_id, stock.id)
 
+    attrs = case attrs do
+      %DividendDeclaration{} = struct -> Map.from_struct(struct)
+      _ -> attrs
+    end
     DividendDeclaration.changeset(%DividendDeclaration{}, attrs)
   end
 end

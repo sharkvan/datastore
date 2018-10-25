@@ -8,3 +8,5 @@ config :stock_craz, StockCraz.Repo,
   database: "stockcraz_test",
   hostname: "postgres",
   pool: Ecto.Adapters.SQL.Sandbox
+
+config :stock_craz, :dividend_event_producer, StockCraz.EventProducers.Sync.DividendDeclaration
