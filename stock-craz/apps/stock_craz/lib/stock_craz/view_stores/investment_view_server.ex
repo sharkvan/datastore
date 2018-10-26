@@ -16,6 +16,21 @@ defmodule StockCraz.ViewStores.InvestmentViewServer do
     GenServer.cast(__MODULE__, {:add, record})
   end
 
+  def stream() do
+    Stream.resource(
+      fn -> GenServer.call(__MODULE__, {:first}) end,
+      fn key -> GenServer.call(__MODULE__, {:next, key}) end,
+      fn _key -> end)
+  end
+
+  def handle_call({:first}, _from, state) do
+    {:reply, InvestmentViewStore.first(), state}
+  end
+
+  def handle_call({:next, key}, _from, state) do
+    {:reply, InvestmentViewStore.next(key), state}
+  end
+
   def handle_call({:add, record}, _from, state) do
     InvestmentViewStore.update(record)
     {:noreply, {}, state}

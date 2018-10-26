@@ -48,4 +48,20 @@ defmodule StockCraz.ViewStores.InvestmentViewStore do
       [] -> {:error, "No investment record for the given symbol"}
     end
   end
+
+  def first() do
+    :ets.first(:investment_view_store)
+  end
+
+  def next(:"$end_of_table") do
+    {:halt, nil}
+  end
+
+  def next(key) do
+    next_key = :ets.next(:investment_view_store, key)
+    value = :ets.lookup(:investment_view_store, key)
+            |> Enum.map(&elem(&1, 1))
+
+    {value, next_key}
+  end
 end

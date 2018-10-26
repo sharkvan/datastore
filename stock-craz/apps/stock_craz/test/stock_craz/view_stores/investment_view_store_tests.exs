@@ -34,13 +34,14 @@ defmodule StockCraz.ViewStores.InvestmentViewStoreTests do
       end
     end
   end
-  describe "" do
+
+  describe "Investment is" do
     setup do
       InvestmentViewStore.create_table()
       {:ok, msg: "nothing"}
     end
 
-    test "Add item to view", state do
+    test "added to the view", state do
       assert InvestmentViewStore.set(%InvestmentViewModel{portfolio_id: 10, symbol: "ABC"})
         
       case InvestmentViewStore.get("ABC") do
@@ -52,7 +53,7 @@ defmodule StockCraz.ViewStores.InvestmentViewStoreTests do
       end
     end
 
-    test "Item not found", state do
+    test "not found in the view", state do
       assert InvestmentViewStore.set(%InvestmentViewModel{portfolio_id: 10, symbol: "ABC"})
 
       case InvestmentViewStore.get("XYZ") do
@@ -65,4 +66,14 @@ defmodule StockCraz.ViewStores.InvestmentViewStoreTests do
 
   end
 
+  describe "Test stream methods" do
+    test "when there are no records in the view" do
+    end
+
+    test "when there is one record in the view" do
+    end
+
+    test "when there is more than one record in the view" do
+    end
+  end
 end
